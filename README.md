@@ -137,7 +137,7 @@ Created to solve a real workflow problem in survival analysis: producing Cox-adj
 
 If you use survkit in your research, please cite:
 ```
-Tadlock, E. (2025). survkit: Survival Curves with Integrated Risk Tables.
+Tadlock, E. (2026). survkit: Survival Curves with Integrated Risk Tables.
 R package version 0.1.0. https://github.com/evtadlock/survkit
 ```
 

@@ -1,9 +1,9 @@
 Package: survkit
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Survival Curves with Integrated Risk Tables
+Version: 0.1.0
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Evelyn", "Tadlock", , "tadlock.ds@gmail.com", role = c("aut", "cre"))
+Description: Publication-ready survival curves with integrated risk tables for both Kaplan-Meier and Cox-adjusted analyses. Provides a unified interface that combines the flexibility of ggadjustedcurves with survminer-style risk tables, censor marks, and confidence intervals.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

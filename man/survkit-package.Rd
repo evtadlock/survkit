@@ -3,9 +3,9 @@
 \docType{package}
 \name{survkit-package}
 \alias{survkit-package}
-\title{survkit: What the Package Does (One Line, Title Case)}
+\title{survkit: Survival Curves with Integrated Risk Tables}
 \description{
-What the package does (one paragraph).
+Publication-ready survival curves with integrated risk tables for both Kaplan-Meier and Cox-adjusted analyses. Provides a unified interface that combines the flexibility of ggadjustedcurves with survminer-style risk tables, censor marks, and confidence intervals.
 }
 \seealso{
 Useful links:
@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Evelyn Tadlock \email{tadlock.ds@gmail.com}
 
 }
 \keyword{internal}
