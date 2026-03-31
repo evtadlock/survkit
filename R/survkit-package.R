@@ -4,6 +4,7 @@
 ## usethis namespace: start
 #' @importFrom stats as.formula
 #' @importFrom rlang .data
+#' @import patchwork
 ## usethis namespace: end
 NULL
 
