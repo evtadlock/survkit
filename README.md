@@ -2,13 +2,21 @@
 
 > The only R package that combines Cox-adjusted survival curves with integrated risk tables
 
+Designed for clinical and biomedical research, survkit supports time-to-event analysis workflows using patient-level data. It enables researchers to generate Kaplan-Meier and Cox-adjusted survival curves with appropriate statistical treatment of censoring and uncertainty.
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
 
 ## The Gap in Existing Tools
 
 **survminer:** Great KM curves + risk tables, but cannot do adjusted curves with risk tables  
 **ggadjustedcurves:** Great adjusted curves, but no risk tables  
-**survkit:** Adjusted curves WITH risk tables in a single function call
+**survkit:** Adjusted curves WITH risk tables in a single function call  
+
+This gap is especially relevant in clinical studies where adjusted survival estimates must be presented alongside interpretable patient risk information.
+
+---
 
 ## Installation
 ```r
@@ -121,17 +129,19 @@ save_survkit("figure1_survival.png", p, width = 10, dpi = 600)
 | risk_table_height | 0.25 | Proportion of plot for risk table |
 | risk_table_text_size | 4 | Text size in risk table |
 
-## Design Philosophy
+## Statistical Design
 
-survkit makes statistically principled decisions:
+survkit makes statistically principled decisions aligned with survival analysis methodology:
 
 - **Censor marks** appear only on Kaplan-Meier curves (observed censoring events)
-- **Cox-adjusted curves** show prediction uncertainty through confidence intervals, not censoring (which does not exist for predictions)
-- **Risk tables** always show observed data, providing context even for adjusted analyses
+- **Cox-adjusted curves** display prediction uncertainty via confidence intervals, not censoring
+- **Risk tables** always reflect observed data, providing interpretability alongside modeled estimates
+
+These choices ensure alignment with best practices in time-to-event analysis.
 
 ## Built for Researchers
-
-Created to solve a real workflow problem in survival analysis: producing Cox-adjusted survival curves with risk tables for medical journals. Used in cardiovascular surgery and multiple sclerosis research.
+Created to solve a real workflow problem in survival analysis: producing Cox-adjusted survival curves with risk tables for medical journals.
+Used in clinical research contexts including cardiovascular outcomes and multiple sclerosis progression analysis, where time-to-event modeling and adjusted survival estimates are required.
 
 ## Citation
 
