@@ -1,0 +1,187 @@
+---
+title: "Clinical Survival Analysis Using survkit"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Clinical Survival Analysis Using survkit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 10,
+  fig.height = 8
+)
+```
+
+## Overview
+
+This vignette demonstrates how to perform time-to-event analysis using the survkit package. The goal is to generate Kaplan-Meier and Cox-adjusted survival curves with appropriate handling of censoring and uncertainty.
+
+Survival analysis is commonly used in clinical research to evaluate outcomes such as time to disease progression, relapse, or death.
+
+## Research Objective
+
+To evaluate differences in survival outcomes between groups and assess how covariates influence time-to-event outcomes using both unadjusted and adjusted survival models.
+
+## Data Description
+
+We use the `lung` dataset from the survival package.
+
+This dataset includes:
+
+- `time`: survival time in days
+- `status`: event indicator (1 = censored, 2 = death)
+- `sex`: grouping variable (1 = male, 2 = female)
+- `age`: patient age
+- `ph.ecog`: ECOG performance status score
+
+For analysis, the event indicator is recoded to a binary variable:
+
+- 1 = event occurred (death)
+- 0 = censored
+
+## Load Libraries
+```{r setup}
+library(survkit)
+library(survival)
+```
+
+## Data Preparation
+```{r data-prep}
+data(lung)
+
+# Recode status: 2 (death) -> 1 (event), 1 (censored) -> 0
+lung$status <- ifelse(lung$status == 2, 1, 0)
+
+# Check data structure
+head(lung[, c("time", "status", "sex", "age", "ph.ecog")])
+```
+
+## Kaplan-Meier Survival Analysis
+
+Kaplan-Meier estimation is used to compute survival probabilities over time without adjusting for covariates.
+```{r km-plot, fig.width=10, fig.height=8}
+km_plot <- survkit(
+  lung,
+  "time",
+  "status",
+  "sex",
+  title = "Kaplan-Meier Survival Curve",
+  subtitle = "Unadjusted Survival by Sex"
+)
+
+km_plot
+```
+
+### Interpretation
+
+The Kaplan-Meier curves represent the probability of survival over time for each group.
+
+- Step decreases indicate observed events (deaths)
+- Censor marks (+ symbols) indicate incomplete follow-up
+- Differences between curves suggest variation in survival between groups
+- Risk table shows number of patients remaining at risk at each timepoint
+
+## Cox-Adjusted Survival Analysis
+
+Cox proportional hazards models allow adjustment for additional covariates.
+```{r cox-plot, fig.width=10, fig.height=8}
+cox_plot <- survkit(
+  lung,
+  "time",
+  "status",
+  "sex",
+  adjust_for = c("age", "ph.ecog"),
+  title = "Cox-Adjusted Survival Curve",
+  subtitle = "Adjusted for Age and ECOG Performance Status"
+)
+
+cox_plot
+```
+
+### Interpretation
+
+The adjusted curves represent survival estimates at reference covariate values (mean age, mean ECOG score) derived from the Cox model.
+
+- Curves are smoother because they represent model-based predictions
+- Confidence intervals reflect uncertainty in estimated survival probabilities
+- Censor marks are not shown, as they are not defined for predicted curves
+- Risk table shows observed patient counts from the complete-case analysis
+
+## Comparison: Unadjusted vs Adjusted
+```{r comparison, fig.width=16, fig.height=8}
+library(patchwork)
+
+km_plot | cox_plot
+```
+
+### Interpretation
+
+Comparing unadjusted and adjusted curves helps identify whether observed group differences are explained by other variables.
+
+In this example:
+
+- Both plots show females (sex = 2) have better survival than males (sex = 1)
+- The difference persists after adjusting for age and performance status
+- This suggests the survival difference is not fully explained by these covariates
+
+## Customization
+
+survkit allows extensive customization of visual elements:
+```{r custom-plot, fig.width=10, fig.height=8}
+custom_plot <- survkit(
+  lung,
+  "time",
+  "status",
+  "sex",
+  line_width = 2,
+  censor_size = 4,
+  conf_int_alpha = 0.3,
+  viridis_option = "plasma",
+  title = "Customized Survival Curve"
+)
+
+custom_plot
+```
+
+## Statistical Considerations
+
+- **Kaplan-Meier estimates** are non-parametric and based on observed data
+- **Cox models** estimate hazard ratios while adjusting for covariates
+- **Censoring** must be handled correctly to avoid biased estimates
+
+survkit enforces these principles by:
+
+- Showing censor marks only for observed data (not predictions)
+- Representing uncertainty using confidence intervals
+- Aligning risk tables with observed patient counts
+- Making statistically appropriate decisions automatically
+
+## Saving Publication-Ready Figures
+```{r save-plot, eval=FALSE}
+# Save at 600 DPI with golden ratio dimensions
+save_survkit("km_survival.png", km_plot, width = 10, dpi = 600)
+save_survkit("cox_survival.png", cox_plot, width = 10, dpi = 600)
+```
+
+## Conclusion
+
+This example demonstrates how survkit can be used to produce statistically sound and interpretable survival visualizations for clinical research.
+
+The ability to generate both unadjusted and adjusted survival curves with integrated risk tables supports reproducible workflows and improves interpretability of time-to-event analyses.
+
+### Key Features
+
+1. **Unified interface** for KM and Cox-adjusted curves
+2. **Automatic risk tables** perfectly aligned with curves
+3. **Statistically rigorous** handling of censoring and uncertainty
+4. **Publication-ready styling** with customization options
+5. **Reproducible** workflows for clinical research
+
+## References
+
+- Cox, D. R. (1972). Regression Models and Life-Tables. *Journal of the Royal Statistical Society: Series B*, 34(2), 187-202.
+- Kaplan, E. L., & Meier, P. (1958). Nonparametric estimation from incomplete observations. *Journal of the American Statistical Association*, 53(282), 457-481.
+- Therneau, T. M. (2023). *A Package for Survival Analysis in R*. R package version 3.5-7.

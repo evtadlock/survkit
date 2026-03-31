@@ -15,3 +15,7 @@ Imports:
     survival
 URL: https://github.com/evtadlock/survkit
 BugReports: https://github.com/evtadlock/survkit/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
